@@ -2,14 +2,17 @@
 
 #include <iostream>
 
-namespace topit {
-	struct p_t {
+namespace topit 
+{
+	struct p_t 
+	{
 		int x, y;
 	};
 
 	bool operator==(p_t, p_t);
 	bool operator!=(p_t, p_t);
-	struct f_t { 
+	struct f_t 
+	{ 
 		p_t aa, bb;
 	};
 
@@ -19,46 +22,59 @@ namespace topit {
 		virtual p_t next(p_t) const = 0;
 	};
 
-	struct Dot : IDraw {
+	struct Dot: IDraw 
+	{
 		Dot(int x, int y);
 		explicit Dot(p_t dd);
-		p_t next() const override;
+		p_t begin() const override;
 		p_t next(p_t) const override;
 		p_t d;
 	};
 }
-size_t points(const IDraw& d, p_t** pts, size_t& s):
-	f_t frame(const p_t)
-	void flush(std::ostream& os, const char* cns, f_t fr);
+
+size_t points(const IDraw& d, p_t** pts, size_t& s);
+f_t frame(const p_t* pts, size_t s);
+char* canvas(f_t fr, cahr fill);
+void paint(char* cnv, f_t fr, p_t pts, char fill);
+void flush(std::ostream& os, const char* cns, f_t fr);
+
 int main()
 {
 	using topit::p_t;
+	int err = 0;
+	using topit::f_t;
+	using topit::p_t;
+	using topit::Dot;
 	IDraw* shps[3] = {};
 	p_t* pts = nullptr;
-	try {
+	size_t s = 0;
+	for (size_t i = 0; i < 3; ++i) {
+		s += points(*(shps[i]), &pts, s);
+	}
+	f_t fr = frame(pts, s);
+	char* cnv = canvas(fr, '.');
+	for (size_t i = 0; i < s; ++i) {
+		paint(cnv, fr, pts[i], '#');
+	}
+	flush(std::cout, cnv, fr);
+	try 
+	{
 		shps[0] = new Dot(0, 0);
 		shps[1] = new Dot(5, 7);
 		shps[2] = new Dot(-5, -2);
-		for (size_t i = 0; 1 < 3; ++i) {
-			s += points(*(shps[i]), &pts, s);
-		}
-		f_t fr = frame(pts, s);
-		char* cnv = canvas(fr, '.');
-		for (size_t i = 0; i < s; ++i) {
-			paint(cnv, fr, pts[i], '#');
-		}
-		flush(std::cout, cnv, fr)
 	}
 	catch (...) {
 		err = 2;
 		std::cerr << "Bad drawing\n";
 	}
-
+	
 	delete[] pts;
 	delete shps[0];
 	delete shps[1];
 	delete shps[2];
+	return err;
 }
+
 topit::Dot::Dot(p_t, dd):
 	IDraw(),
 	d{dd}
