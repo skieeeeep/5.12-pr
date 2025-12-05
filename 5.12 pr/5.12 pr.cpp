@@ -28,7 +28,8 @@ namespace topit {
 	};
 }
 size_t points(const IDraw& d, p_t** pts, size_t& s):
-f_t frame(const p_t)
+	f_t frame(const p_t)
+	void flush(std::ostream& os, const char* cns, f_t fr);
 int main()
 {
 	using topit::p_t;
@@ -46,6 +47,7 @@ int main()
 		for (size_t i = 0; i < s; ++i) {
 			paint(cnv, fr, pts[i], '#');
 		}
+		flush(std::cout, cnv, fr)
 	}
 	catch (...) {
 		err = 2;
