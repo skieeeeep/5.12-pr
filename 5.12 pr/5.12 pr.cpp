@@ -28,6 +28,23 @@ char* canvas(topit::f_t fr, char fill);
 void paint(char* cnv, topit::f_t fr, topit::p_t pts, char fill);
 void flush(std::ostream& os, const char* cns, topit::f_t fr);
 
+struct vline : IDraw {
+	vline(p_t s, p_t e);
+	p_t begin() const override;
+	p_t next(p_t) const override;
+
+	p_t start, end;
+};
+
+struct rect : IDraw {
+	rect(p_t u_l, p_t r_b);
+	p_t begin() const override;
+	p_t next(p_t) const override;
+
+	p_t upper_left;
+	p_t right_bottom;
+};
+
 int main()
 {
 	using topit::IDraw;
@@ -96,4 +113,35 @@ bool topit:: operator==(p_t a, p_t b) {
 }
 bool topit:: operator!=(p_t a, p_t b) {
 	return  !(a == b);
+}
+
+topit::vline::vline(p_t s, p_t e):
+	IDraw(),
+	start(s),
+	end(e)
+{
+}
+
+topit::p_t topit::vline::begin() const {
+	return start;
+}
+
+topit::p_t topit::vline::next(p_t prev) const {
+	if (prev == end) {
+		return start;
+	}
+	if (prev.x == start.x && start.y <= prev.y && prev.y <= end.y) {
+		return { prev.x, prev.y + 1 };
+	}
+	throw std::logic_error("bad impl");
+}
+
+topit::rect::rect(p_t u_l, p_t r_b):
+	IDraw(),
+	upper_left(u_l),
+	right_bottom(r_b)
+{}
+
+topit::p_t topit::rect::begin() const {
+	return upper_left;
 }
