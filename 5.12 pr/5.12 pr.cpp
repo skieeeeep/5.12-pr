@@ -30,9 +30,26 @@ namespace topit {
 int main()
 {
 	using topit::p_t;
-	p_t a{ 1,0 }, b{ 1,0 };
-	std::cout << (a != b) << "\n";
+	IDraw* shps[3] = {};
+	try {
+		shps[0] = new Dot(0, 0);
+		shps[1] = new Dot(5, 7);
+		shps[2] = new Dot(-5, -2);
+	}
+
+	catch (...) {
+		err = 2;
+		std::cerr << "Bad drawing\n";
+	}
+
+	delete shps[0];
+	delete shps[1];
+	delete shps[2];
 }
+topit::Dot::Dot(p_t, dd):
+	IDraw(),
+	d{dd}
+{}
 topit::Dot(int x, int y):
 	IDraw(),
 	d{ x,y }
