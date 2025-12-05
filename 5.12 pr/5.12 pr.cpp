@@ -27,21 +27,28 @@ namespace topit {
 		p_t d;
 	};
 }
+size_t points(const IDraw& d, p_t** pts, size_t& s):
+
 int main()
 {
 	using topit::p_t;
 	IDraw* shps[3] = {};
+	p_t* pts = nullptr;
 	try {
 		shps[0] = new Dot(0, 0);
 		shps[1] = new Dot(5, 7);
 		shps[2] = new Dot(-5, -2);
+		for (size_t i = 0; 1 < 3; ++i) {
+			s += points(*(shps[i]), &pts, s);
+		}
+		f_t fr = frame(pts, s);
 	}
-
 	catch (...) {
 		err = 2;
 		std::cerr << "Bad drawing\n";
 	}
 
+	delete[] pts;
 	delete shps[0];
 	delete shps[1];
 	delete shps[2];
